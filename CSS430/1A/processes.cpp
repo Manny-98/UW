@@ -23,14 +23,44 @@ int main( int argc, char** argv ) {
   }
   else if ( pid == 0 ) {
     // I'm a child
+      
+      if (pipe(fds[0])<0){                  // create a pipe using fds[0]
+          perror("pipe error")
+      }
+      
+      if ( ( pid = fork( ) ) < 0 ) {        // fork a grand-child
+        perror( "fork error" );
+      }
+      else  if ( pid == 0 ) {
+          // if I'm a grand-child
+            
+            if (pipe(fds[1])<0){                  // create a pipe using fds[1]
+                perror("pipe error")
+            }
+          if ( ( pid = fork( ) ) < 0 ) {        // fork a great-grand-child
+            perror( "fork error" );
+          }
+          else  if ( pid == 0 ) {
+              // if I'm a great-grand-child
+              //fds[0] set to write
+              dup2(fds[0][1],1);
+              close(fds[1][0]);
+              close(fds[0][0]);
+              close(fds[1][1]);
+              execlp("ps","ps","-A",NULL);           // execute "ps"
+          }
+    else
+        dup2(fds[0],0,0);
+        close(fds[1][0]);
+        close(fds[0,1]);
+          
+          
+          
+              
+          
+   
 
-    // create a pipe using fds[0]
-    // fork a grand-child
-    // if I'm a grand-child
-	// create a pipe using fds[1]
-	// fork a great-grand-child
- 	// if I'm a great-grand-child
-             // execute "ps"
+        
         // else if I'm a grand-child
              // execute "grep"
     // else if I'm a child
@@ -42,3 +72,7 @@ int main( int argc, char** argv ) {
     cout << "commands completed" << endl;
   }
 }
+
+
+
+
