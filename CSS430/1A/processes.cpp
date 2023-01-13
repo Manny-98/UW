@@ -50,11 +50,11 @@ int main( int argc, char** argv ) {
               execlp("ps","ps","-A",NULL);           // execute "ps"
           }
     else
-        dup2(fds[0],0,0);
+        dup2(fds[0],[0],0);
         close(fds[1][0]);
         close(fds[0,1]);
           
-          
+      } 
           
               
           
@@ -65,6 +65,7 @@ int main( int argc, char** argv ) {
              // execute "grep"
     // else if I'm a child
        // execute "wc"
+  }
   }
   else {
     // I'm a parent
