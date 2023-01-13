@@ -67,6 +67,7 @@ int main( int argc, char** argv ) {
           // execute "wc"
       }
   }
+  }
   else {
     // I'm a parent
     wait( NULL );
