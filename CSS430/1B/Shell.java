@@ -30,29 +30,39 @@ public class Shell extends Thread
                 cmdLine = inputBuf.toString( );
             } while ( cmdLine.length( ) == 0 );
             String[] args = SysLib.stringToArgs( cmdLine );
-	    // now args[] got "cmd1 arg ... ;or& cmd2 arg ... ;or& ...
+        // now args[] got "cmd1 arg ... ;or& cmd2 arg ... ;or& ...
             int first = 0;
             for ( int i = 0; i < args.length; i++ ) {
                 if ( args[i].equals( ";" ) || args[i].equals( "&" )
                      || i == args.length - 1 ) { // keep scanning till the next delim.
-                    String[] command = generateCmd( args, first, 
-                                                    ( i==args.length - 1 ) ? 
+                    String[] command = generateCmd( args, first,
+                                                    ( i==args.length - 1 ) ?
                                                     i+1 : i );
-		    // now command[] got a command and its arguments executing
-		    // the last delimiter ';' or '&'
+            // now command[] got a command and its arguments executing
+            // the last delimiter ';' or '&'
                     if ( command != null ) {
-			// HW1B:
-			// Check if command[0] is “exit”. If so, get terminated
+                        // HW1B:
+                        // Check if command[0] is “exit”. If so, get terminated
+                        if(command[0].equals("exit"))
+                        {
+                            SysLib.exit();
+                            break;
+                        }
                         // otherwise, pass command to SysLib.exec( ).
-                        // if aergs[i] is “&” don’t call SysLib.join( ). 
-			// Otherwise (i.e., “;”), keep calling SysLib.join( ) 
-			// EASY!!
+                        else
+                        {
+                            int res = SysLib.exec(command);
+
+                            // if aergs[i] is “&” don’t call SysLib.join( ).
+                            if(!args[i].equals("&"))
+                            {
+                                while(SysLib.join() != res);
+                            }
+                                
+                        }
+                            
+                    // EASY!!
                     }
-                    first = i + 1;
-                }
-            }
-        }
-    }
 
     /**
      * returns a String array of a command and its arguments excluding
@@ -65,8 +75,9 @@ public class Shell extends Thread
         if ( last - first <= 0 )
             return null;
         String[] command = new String[ last - first ];
-        for ( int i = first ; i < last; i++ ) 
+        for ( int i = first ; i < last; i++ )
               command[i - first] = args[i];
         return command;
     }
 }
+
