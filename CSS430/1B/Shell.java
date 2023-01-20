@@ -61,8 +61,13 @@ public class Shell extends Thread
                                 
                         }
                             
-                    // EASY!!
-                    }
+			// EASY!!
+        }
+        first = i + 1;
+    }
+}
+}
+}
 
     /**
      * returns a String array of a command and its arguments excluding
