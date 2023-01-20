@@ -47,7 +47,7 @@ public class Shell extends Thread {
             // Check if command[0] is “exit”. If so, get terminated
             if (command[0].equals("exit")) {
               SysLib.exit();
-              break;
+              return;
             }
             // otherwise, pass command to SysLib.exec( ).
             else {
