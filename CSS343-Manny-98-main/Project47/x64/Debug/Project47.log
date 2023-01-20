@@ -1,0 +1,31 @@
+﻿  PPMImage.cpp
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(38,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(40,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(51,27): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(51,59): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(52,23): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(52,51): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(113,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(115,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(116,10): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(116,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(116,34): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(116,52): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(121,15): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(121,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(126,15): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(126,33): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(143,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(145,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(146,10): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(146,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(146,34): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(146,52): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(151,15): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(151,27): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(156,15): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(156,33): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(169,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(170,22): warning C4018: '<': signed/unsigned mismatch
+C:\Users\pc\source\repos\Project47\PPMImage.cpp(104): warning C4172: returning address of local variable or temporary: copy
+  Project47.vcxproj -> C:\Users\pc\source\repos\Project47\x64\Debug\Project47.exe
