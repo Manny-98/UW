@@ -1,4 +1,4 @@
-import java.util.*; // Scheduler_pri.java
+import java.util.*; // Scheduler_rr.java
 
 public class Scheduler extends Thread
 {
@@ -49,7 +49,7 @@ public class Scheduler extends Thread
 	Thread myThread = Thread.currentThread( ); // Get my thread object
 	synchronized( queue ) {
 	    for ( int i = 0; i < queue.size( ); i++ ) {
-		TCB tcb = ( TCB )queue.elementAt( i );
+		TCB tcb = queue.elementAt( i );
 		Thread thread = tcb.getThread( );
 		if ( thread == myThread ) // if this is my TCB, return it
 		    return tcb;
@@ -93,7 +93,6 @@ public class Scheduler extends Thread
 
     // A modified addThread of the original algorithm
     public TCB addThread( Thread t ) {
-	t.setPriority( 2 );
 	TCB parentTcb = getMyTcb( ); // get my TCB and find my TID
 	int pid = ( parentTcb != null ) ? parentTcb.getTid( ) : -1;
 	int tid = getNewTid( ); // get a new TID
@@ -109,6 +108,7 @@ public class Scheduler extends Thread
     public boolean deleteThread( ) {
 	TCB tcb = getMyTcb( ); 
 	if ( tcb!= null ) {
+	    this.interrupt( ); 
 	    return tcb.setTerminated( );
 	} else
 	    return false;
@@ -124,37 +124,34 @@ public class Scheduler extends Thread
     public void run( ) {
 	Thread current = null;
 
-	this.setPriority( 6 );
-	
 	while ( true ) {
 	    try {
 		// get the next TCB and its thrad
 		if ( queue.size( ) == 0 )
 		    continue;
-		TCB currentTCB = (TCB)queue.firstElement( );
+		TCB currentTCB = queue.firstElement( );
 		if ( currentTCB.getTerminated( ) == true ) {
 		    queue.remove( currentTCB );
 		    returnTid( currentTCB.getTid( ) );
 		    continue;
-		}
+		    }
 		current = currentTCB.getThread( );
-		if ( current != null ) {
+
+		if ( ( current != null ) ) {
 		    if ( current.isAlive( ) )
-			current.setPriority( 4 );
-		    else {
+			current.resume( );
+		    else
 			// Spawn must be controlled by Scheduler
 			// Scheduler must start a new thread
 			current.start( ); 
-			current.setPriority( 4 );
-		    }
 		}
 		
 		schedulerSleep( );
 		// System.out.println("* * * Context Switch * * * ");
-
-		synchronized ( queue ) {
+		
+		synchronized( queue ) {
 		    if ( current != null && current.isAlive( ) )
-			current.setPriority( 2 );
+			current.suspend( );
 		    queue.remove( currentTCB ); // rotate this TCB to the end
 		    queue.add( currentTCB );
 		}
