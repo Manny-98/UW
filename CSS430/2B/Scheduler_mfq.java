@@ -1,8 +1,8 @@
-import java.util.*; // Scheduler_mfq.java
+import java.util.*; // Scheduler_rr.java
 
 public class Scheduler extends Thread
-{   @SuppressWarnings({"unchecked","rawtypes"})
-    private Vector<TCB>[] queue = new Vector[3];
+{
+    private Vector<TCB> queue;
     private int timeSlice;
     private static final int DEFAULT_TIME_SLICE = 1000;
 
@@ -48,13 +48,11 @@ public class Scheduler extends Thread
     public TCB getMyTcb( ) {
 	Thread myThread = Thread.currentThread( ); // Get my thread object
 	synchronized( queue ) {
-	    for ( int level = 0; level < 3; level++ ) {
-		for ( int i = 0; i < queue[level].size( ); i++ ) {
-		    TCB tcb=queue[level].elementAt( i );
-		    Thread thread = tcb.getThread( );
-		    if ( thread == myThread ) // if this is my TCB, return it
-			return tcb;
-		}
+	    for ( int i = 0; i < queue.size( ); i++ ) {
+		TCB tcb = queue.elementAt( i );
+		Thread thread = tcb.getThread( );
+		if ( thread == myThread ) // if this is my TCB, return it
+		    return tcb;
 	    }
 	}
 	return null;
@@ -68,27 +66,27 @@ public class Scheduler extends Thread
 
     public Scheduler( ) {
 	timeSlice = DEFAULT_TIME_SLICE;
+	queue = new Vector<TCB>( );
 	initTid( DEFAULT_MAX_THREADS );
-	for ( int i = 0; i < 3; i++ ) queue[i] = new Vector<TCB>( );
     }
 
     public Scheduler( int quantum ) {
 	timeSlice = quantum;
+	queue = new Vector<TCB>( );
 	initTid( DEFAULT_MAX_THREADS );
-	for ( int i = 0; i < 3; i++ ) queue[i] = new Vector<TCB>( );
     }
 
     // A new feature added to the original algorithm 
     // A constructor to receive the max number of threads to be spawned
     public Scheduler( int quantum, int maxThreads ) {
 	timeSlice = quantum;
+	queue = new Vector<TCB>( );
 	initTid( maxThreads );
-	for ( int i = 0; i < 3; i++ ) queue[i] = new Vector<TCB>( );
     }
 
     private void schedulerSleep( ) {
 	try {
-	    Thread.sleep( timeSlice / 2 );
+	    Thread.sleep( timeSlice );
 	} catch ( InterruptedException e ) {
 	}
     }
@@ -101,7 +99,7 @@ public class Scheduler extends Thread
 	if ( tid == -1)
 	    return null;
 	TCB tcb = new TCB( t, tid, pid ); // create a new TCB
-	queue[0].add( tcb );
+	queue.add( tcb );
 	return tcb;
     }
 
@@ -110,7 +108,7 @@ public class Scheduler extends Thread
     public boolean deleteThread( ) {
 	TCB tcb = getMyTcb( ); 
 	if ( tcb!= null ) {
-	    this.interrupt( );
+	    this.interrupt( ); 
 	    return tcb.setTerminated( );
 	} else
 	    return false;
@@ -125,57 +123,38 @@ public class Scheduler extends Thread
     // A modified run of the original algorithm
     public void run( ) {
 	Thread current = null;
-	TCB currentTCB = null;
-	TCB prevTCB = null;
-	int slice[] = new int[3];
-	
-	for ( int i = 0; i < 3; i++ )
-	    slice[i] = 0;
 
 	while ( true ) {
 	    try {
-		// get the next TCB and its thread from the highest queue
-		int level = 0;
-		for ( ; level < 3; level++ ) {
-		    if ( slice[level] == 0 ) {
-			if ( queue[level].size( ) == 0 )
-			    continue;
-			currentTCB = queue[level].firstElement( );
-			break;
-		    }
-		    else {
-			currentTCB = prevTCB;
-			break;
-		    }
-		}
-		if ( level == 3 )
+		// get the next TCB and its thrad
+		if ( queue.size( ) == 0 )
 		    continue;
-
+		TCB currentTCB = queue.firstElement( );
 		if ( currentTCB.getTerminated( ) == true ) {
-		    // Remove this thread from queue[level]
-		    // Return this thread id
-		    // slice[level] must be 0
+		    queue.remove( currentTCB );
+		    returnTid( currentTCB.getTid( ) );
 		    continue;
-		}
+		    }
 		current = currentTCB.getThread( );
 
 		if ( ( current != null ) ) {
-		    // If current is alive, resume it otherwise start it.
-		    // The same logic as Scheduler_rr.java
-		    // Just copy the logic here.
+		    if ( current.isAlive( ) )
+			current.resume( );
+		    else
+			// Spawn must be controlled by Scheduler
+			// Scheduler must start a new thread
+			current.start( ); 
 		}
-
-		// Scheduler should sleep here.
-		// If current is alive, suspend it.
-		// The same logic as Scheduler_rr.java
-		// Just copy the logic here
-
-		prevTCB = currentTCB;
-		// This is the heart of Prog2B!!!!
-		// Update slice[level].
-		// if slice[level] returns to 0,
-		//   currentThread must go to the next level or
-		//   rotate back in queue[2]
+		
+		schedulerSleep( );
+		// System.out.println("* * * Context Switch * * * ");
+		
+		synchronized( queue ) {
+		    if ( current != null && current.isAlive( ) )
+			current.suspend( );
+		    queue.remove( currentTCB ); // rotate this TCB to the end
+		    queue.add( currentTCB );
+		}
 	    } catch ( NullPointerException e3 ) { };
 	}
     }
