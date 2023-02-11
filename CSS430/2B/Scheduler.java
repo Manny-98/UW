@@ -187,36 +187,42 @@ public class Scheduler extends Thread {
 				// The same logic as Scheduler_rr.java
 				// Just copy the logic here
 				synchronized (queue) {
-					if(level == 0)
+					if (current != null && current.isAlive())
+						current.suspend();
+
+					prevTCB = currentTCB;
+					// This is the heart of Prog2B!!!!
+					// Update slice[level].
+					slice[level]++;
+
+					while (level < 3)// max level
 					{
-						slice[0] = 0;
-	
-						//currentThread must go to the next level
-						queue[level].remove(currentTCB);
-						queue[level + 1].add(currentTCB);
+						// if slice[level] returns to 0
+						if (level == 0) {
+							slice[0] = 0;
+
+							// currentThread must go to the next level
+							queue[level].remove(currentTCB);
+							queue[level + 1].add(currentTCB);
+						} else if (level == 1) {
+							slice[level] = 0;
+
+							// currentThread must go to the next level
+							queue[level].remove(currentTCB);
+							queue[level + 1].add(currentTCB);
+						} else if (level == 2) {
+							slice[level] = 0;
+
+							// currentThread must go to the next level
+							// rotate back in queue[2]
+							queue[2].remove(currentTCB);
+							queue[2].add(currentTCB);
+						}
+						// update level
+						level++;
 					}
-					else if(level == 1)
-					{
-						slice[level] = 0;
-	
-						//currentThread must go to the next level
-						queue[level].remove(currentTCB);
-						queue[level + 1].add(currentTCB);
-					}
-					else if (level == 2)
-					{
-						slice[level] = 0;
-	
-						// currentThread must go to the next level
-						// rotate back in queue[2]
-						queue[2].remove(currentTCB);
-						queue[2].add(currentTCB);
-					}
-					// update level
-					level++;
 				}
-			}		
-			 catch (NullPointerException e3) {
+			} catch (NullPointerException e3) {
 			}
 			;
 		}
