@@ -43,6 +43,7 @@ public:
     // implement by yourself by referring to the textbook.
     //lock pthread make sure to follow it by unlock
     pthread_mutex_lock(&lock);
+    
     cout << "philosopher[" << i << "] put down chopsticks" << endl;
     //done eating
     state[i]=THINKING;
