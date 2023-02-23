@@ -1,5 +1,3 @@
-import javax.rmi.CORBA.Tie;
-
 /*
  * This is a template of SyncQueue.java. Chagne this file name into SyncQueue.java and
  * complete the implementation
